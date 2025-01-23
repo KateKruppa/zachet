@@ -26,46 +26,37 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
-            // Создаём пять кубов
-            const box1 = BABYLON.MeshBuilder.CreateBox("box1", {}, scene);
-            box1.position = new BABYLON.Vector3(2.5, 1, 0);
-            
-            var texture = new BABYLON.Texture("pic1.jpg", scene);
-            
-            var material = new BABYLON.StandardMaterial("boxMaterial", scene);
+            // Загружаем текстуру
+            const texture = new BABYLON.Texture("pic1.jpg", scene);
+            const material = new BABYLON.StandardMaterial("boxMaterial", scene);
             material.diffuseTexture = texture;  // Назначаем текстуру
 
-            // Применяем материал к кубу
-            box1.material = material;
+            // Функция для создания кубов с текстурой
+            function createTexturedBox(name, position) {
+                const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
+                box.position = position;
+                box.material = material;
 
-            const newUVs = [
-                0, 0,  1, 0,  1, 1,  0, 1,  // передняя грань
-                0, 0,  1, 0,  1, 1,  0, 1,  // задняя грань
-                0, 0,  1, 0,  1, 1,  0, 1,  // верхняя грань
-                0, 0,  1, 0,  1, 1,  0, 1,  // нижняя грань
-                0, 0,  1, 0,  1, 1,  0, 1,  // левая грань
-                0, 0,  1, 0,  1, 1,  0, 1   // правая грань
-            ];
-            box.setVerticesData(BABYLON.VertexBuffer.UVKind, newUVs);
+                // Устанавливаем одинаковые UV-координаты для всех граней
+                const newUVs = [
+                    0, 0,  1, 0,  1, 1,  0, 1,  // передняя грань
+                    0, 0,  1, 0,  1, 1,  0, 1,  // задняя грань
+                    0, 0,  1, 0,  1, 1,  0, 1,  // верхняя грань
+                    0, 0,  1, 0,  1, 1,  0, 1,  // нижняя грань
+                    0, 0,  1, 0,  1, 1,  0, 1,  // левая грань
+                    0, 0,  1, 0,  1, 1,  0, 1   // правая грань
+                ];
+                box.setVerticesData(BABYLON.VertexBuffer.UVKind, newUVs);
 
-            return scene;
+                return box;
+            }
 
-            // Запускаем рендеринг
-            engine.runRenderLoop(function () {
-                scene.render();
-            });
-
-            const box2 = BABYLON.MeshBuilder.CreateBox("box2", {}, scene);
-            box2.position = new BABYLON.Vector3(-2.5, 1, 0);
-
-            const box3 = BABYLON.MeshBuilder.CreateBox("box3", {}, scene);
-            box3.position = new BABYLON.Vector3(0, 1, 2.5);
-
-            const box4 = BABYLON.MeshBuilder.CreateBox("box4", {}, scene);
-            box4.position = new BABYLON.Vector3(0, 1, -2.5);
-
-            const box5 = BABYLON.MeshBuilder.CreateBox("box5", {}, scene);
-            box5.position = new BABYLON.Vector3(-2.5, 1, -2.5);
+            // Создаём пять кубов с текстурой
+            createTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
+            createTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
+            createTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
+            createTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
+            createTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
 
             return scene;
         };
