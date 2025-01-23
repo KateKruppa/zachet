@@ -31,36 +31,27 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
-            // Функция создания куба с разными картинками на разных гранях
-            function createBox(x, y, z, textures) {
+            // Функция создания куба с уникальной картинкой
+            function createBox(x, y, z, textureFile) {
                 const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
                 box.position.set(x, y, z);
 
-                // Создаём материалы для каждой грани с текстурой
-                const materials = textures.map(textureFile => {
-                    const material = new BABYLON.StandardMaterial("material", scene);
-                    material.diffuseTexture = new BABYLON.Texture(textureFile, scene);
-                    return material;
-                });
+                // Создаём материал с текстурой для куба
+                const material = new BABYLON.StandardMaterial("material", scene);
+                material.diffuseTexture = new BABYLON.Texture(textureFile, scene);
 
-                // MultiMaterial для всех граней
-                const multiMaterial = new BABYLON.MultiMaterial("multiMaterial", scene);
-                materials.forEach((mat, index) => {
-                    multiMaterial.subMaterials.push(mat);
-                });
-
-                // Назначаем MultiMaterial кубу
-                box.material = multiMaterial;
+                // Назначаем материал кубу
+                box.material = material;
 
                 return box;
             }
 
-            // Создаём 5 кубов с разными картинками на каждой грани
-            createBox(-4, 2, 2, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
-            createBox(-2, 1, 1, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
-            createBox(0, 0, 0, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
-            createBox(2, 1, 1, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
-            createBox(4, 2, 2, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+            // Создаём 5 кубов с разными картинками на каждом
+            createBox(-4, 2, 2, "pic1.jpg");
+            createBox(-2, 1, 1, "pic2.jpg");
+            createBox(0, 0, 0, "pic3.jpg");
+            createBox(2, 1, 1, "pic4.jpg");
+            createBox(4, 2, 2, "pic5.jpg");
 
 
             // Добавляем музыку (без автозапуска)
