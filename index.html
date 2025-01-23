@@ -49,7 +49,7 @@
                         new BABYLON.ExecuteCodeAction(
                         BABYLON.ActionManager.OnPointerDownTrigger, 
                         function () {
-                            
+                            console.log(`Меняем текстуру с ${textureFile1} на ${textureFile2}`);
                             box.material.diffuseTexture = new BABYLON.Texture(textureFile2, scene);
                         }
                     )
