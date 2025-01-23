@@ -32,8 +32,8 @@
             light.intensity = 0.8;
 
             // Функция создания куба с уникальной картинкой
-            function createBox(x, y, z, textureFile) {
-                const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
+            function createBox(x, y, z, textureFile, size) {
+                const box = BABYLON.MeshBuilder.CreateBox("box", { size: size }, scene);
                 box.position.set(x, y, z);
 
                 // Создаём материал с текстурой для куба
