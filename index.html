@@ -38,10 +38,17 @@
             // Применяем материал к кубу
             box1.material = material;
 
-            material.diffuseTexture.uScale = 1;  // Масштаб по оси X
-            material.diffuseTexture.vScale = 1;  // Масштаб по оси Y
-            material.diffuseTexture.uOffset = 0; // Сдвиг по оси X
-            material.diffuseTexture.vOffset = 0; // Сдвиг по оси Y
+            const newUVs = [
+                0, 0,  1, 0,  1, 1,  0, 1,  // передняя грань
+                0, 0,  1, 0,  1, 1,  0, 1,  // задняя грань
+                0, 0,  1, 0,  1, 1,  0, 1,  // верхняя грань
+                0, 0,  1, 0,  1, 1,  0, 1,  // нижняя грань
+                0, 0,  1, 0,  1, 1,  0, 1,  // левая грань
+                0, 0,  1, 0,  1, 1,  0, 1   // правая грань
+            ];
+            box.setVerticesData(BABYLON.VertexBuffer.UVKind, newUVs);
+
+            return scene;
 
             // Запускаем рендеринг
             engine.runRenderLoop(function () {
