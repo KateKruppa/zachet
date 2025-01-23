@@ -31,43 +31,37 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
-            // Материал с текстурой
-            const textureMaterial = new BABYLON.StandardMaterial("textureMaterial", scene);
-            textureMaterial.diffuseTexture = new BABYLON.Texture("pic1.jpg", scene);
-
-            // Обычный серый материал
-            const defaultMaterial = new BABYLON.StandardMaterial("defaultMaterial", scene);
-            defaultMaterial.diffuseColor = new BABYLON.Color3(0.0, 0.7, 0.7);
-
-            // MultiMaterial для раздельных граней
-            const multiMaterial = new BABYLON.MultiMaterial("multiMaterial", scene);
-            multiMaterial.subMaterials.push(defaultMaterial); // 0: серый
-            multiMaterial.subMaterials.push(textureMaterial); // 1: текстура
-
-            // Функция создания куба с текстурой на передней грани
-            function createBox(x, y, z) {
+            // Функция создания куба с разными картинками на разных гранях
+            function createBox(x, y, z, textures) {
                 const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
                 box.position.set(x, y, z);
+
+                // Создаём материалы для каждой грани с текстурой
+                const materials = textures.map(textureFile => {
+                    const material = new BABYLON.StandardMaterial("material", scene);
+                    material.diffuseTexture = new BABYLON.Texture(textureFile, scene);
+                    return material;
+                });
+
+                // MultiMaterial для всех граней
+                const multiMaterial = new BABYLON.MultiMaterial("multiMaterial", scene);
+                materials.forEach((mat, index) => {
+                    multiMaterial.subMaterials.push(mat);
+                });
+
+                // Назначаем MultiMaterial кубу
                 box.material = multiMaterial;
 
-                // Назначаем материал для каждой грани
-                box.subMeshes = [];
-                box.subMeshes.push(new BABYLON.SubMesh(1, 0, box.getTotalVertices(), 0, 6, box));  // Грань 0 (обычная)
-                box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 6, 6, box));  // Грань 1 (обычная)
-                box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 12, 6, box)); // Грань 2 (обычная) Т
-                box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 18, 6, box)); // Грань 3 (обычная)
-                box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 24, 6, box)); // Грань 4 (обычная)
-                box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 30, 6, box)); // Грань 5 (обычная)
-                
                 return box;
             }
 
-            // Создаём 5 кубов в ряд
-            createBox(-4, 2, 2, "pic1.jpg");
-            createBox(-2, 1, 1, "pic2.jpg");
-            createBox(0, 0, 0, "pic3.jpg");
-            createBox(2, 1, 1, "pic4.jpg");
-            createBox(4, 2, 2, "pic5.jpg");
+            // Создаём 5 кубов с разными картинками на каждой грани
+            createBox(-4, 2, 2, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+            createBox(-2, 1, 1, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+            createBox(0, 0, 0, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+            createBox(2, 1, 1, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+            createBox(4, 2, 2, ["pic1.jpg", "pic2.jpg", "pic3.jpg", "pic4.jpg", "pic5.jpg", "pic6.jpg"]);
+
 
             // Добавляем музыку (без автозапуска)
             const music = new BABYLON.Sound("backgroundMusic", "music.mp3", scene, null, {
