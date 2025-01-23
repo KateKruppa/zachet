@@ -30,8 +30,8 @@
 
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
+            
 
-            // Функция создания куба с уникальной картинкой
             function createBox(x, y, z, textureFile, size) {
                 const box = BABYLON.MeshBuilder.CreateBox("box", { size: size }, scene);
                 box.position.set(x, y, z);
@@ -46,7 +46,7 @@
                 return box;
             }
 
-            // Создаём 5 кубов с разными картинками на каждом
+            
             createBox(-2, 0, -6, "pic3.jpg", 2);
             createBox(2, 0, -6, "pic2.jpg", 2);
             createBox(0, 0, 0, "pic1.jpg", 3);
@@ -54,14 +54,14 @@
             createBox(2, 0, 6, "pic5.jpg", 2);
 
 
-            // Добавляем музыку (без автозапуска)
+            
             const music = new BABYLON.Sound("backgroundMusic", "music.mp3", scene, null, {
                 loop: true,
                 autoplay: false,
                 volume: 0.5
             });
 
-            // Включение музыки по кнопке
+            
             document.getElementById("playMusic").addEventListener("click", () => {
                 if (music.isPlaying) {
                     music.stop();
