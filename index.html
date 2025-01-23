@@ -25,7 +25,6 @@
             const background = new BABYLON.Layer("background", "forest.jpg", scene, true);
             background.texture.level = 1; // Яркость фона
 
-
             const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4, Math.PI / 3, 13, BABYLON.Vector3.Zero(), scene);
             camera.attachControl(canvas, true);
 
@@ -64,11 +63,11 @@
             }
 
             // Создаём 5 кубов в ряд
-            createBox(-4, 2, 2);
-            createBox(-2, 1, 1);
-            createBox(0, 0, 0);
-            createBox(2, 1, 1);
-            createBox(4, 2, 2);
+            createBox(-4, 2, 2, "pic1.jpg");
+            createBox(-2, 1, 1, "pic2.jpg");
+            createBox(0, 0, 0, "pic3.jpg");
+            createBox(2, 1, 1, "pic4.jpg");
+            createBox(4, 2, 2, "pic5.jpg");
 
             // Добавляем музыку (без автозапуска)
             const music = new BABYLON.Sound("backgroundMusic", "music.mp3", scene, null, {
