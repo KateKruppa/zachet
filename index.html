@@ -8,14 +8,13 @@
     <style>
         body, html { margin: 0; overflow: hidden; width: 100%; height: 100%; }
         canvas { width: 100%; height: 100%; display: block; }
-        button { padding: 10px; font-size: 16px; cursor: pointer; }
+        button { padding: 10px; font-size: 16px; cursor: pointer; position: absolute; top: 10px; left: 10px; z-index: 10; }
     </style>
 </head>
 <body>
-    <button id="playMusic" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
-        Включить музыку
-    </button>
+    <button id="playMusic">Включить музыку</button>
     <canvas id="renderCanvas"></canvas>
+
     <script>
         const canvas = document.getElementById("renderCanvas");
         const engine = new BABYLON.Engine(canvas, true);
@@ -30,39 +29,50 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
-            // Функция создания куба с правильной текстурой
-            function createCorrectedTexturedBox(name, position) {
-                const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
-                const texture = new BABYLON.Texture("pic1.jpg", scene);
-                texture.uScale = -1;  // Инверсия текстуры по горизонтали
-                texture.vScale = -1;  // Инверсия текстуры по вертикали
+            // Создание куба
+            const box = BABYLON.MeshBuilder.CreateBox("box", {}, scene);
 
-                const material = new BABYLON.StandardMaterial(name + "Material", scene);
-                material.diffuseTexture = texture;
+            // Материал с текстурой
+            const textureMaterial = new BABYLON.StandardMaterial("textureMaterial", scene);
+            textureMaterial.diffuseTexture = new BABYLON.Texture("pic1.jpg", scene);
+            textureMaterial.diffuseTexture.uScale = -1; // Инвертирование текстуры, если нужно
+            textureMaterial.diffuseTexture.vScale = -1;
 
-                box.material = material;
-                box.position = position;
+            // Обычный серый материал
+            const defaultMaterial = new BABYLON.StandardMaterial("defaultMaterial", scene);
+            defaultMaterial.diffuseColor = new BABYLON.Color3(0.7, 0.7, 0.7);
 
-                return box;
-            }
+            // MultiMaterial для раздельных граней
+            const multiMaterial = new BABYLON.MultiMaterial("multiMaterial", scene);
+            multiMaterial.subMaterials.push(defaultMaterial); // 0: серый
+            multiMaterial.subMaterials.push(textureMaterial); // 1: текстура
 
-            // Создаём пять кубов с правильной текстурой
-            createCorrectedTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
-            createCorrectedTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
-            createCorrectedTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
-            createCorrectedTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
-            createCorrectedTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
+            // Применяем MultiMaterial
+            box.material = multiMaterial;
+
+            // Назначаем материал для каждой грани
+            box.subMeshes = [];
+            box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 0, 6, box));  // Грань 0 (обычная)
+            box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 6, 6, box));  // Грань 1 (обычная)
+            box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 12, 6, box)); // Грань 2 (обычная)
+            box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 18, 6, box)); // Грань 3 (обычная)
+            box.subMeshes.push(new BABYLON.SubMesh(1, 0, box.getTotalVertices(), 24, 6, box)); // Грань 4 (ТЕКСТУРА)
+            box.subMeshes.push(new BABYLON.SubMesh(0, 0, box.getTotalVertices(), 30, 6, box)); // Грань 5 (обычная)
 
             // Добавляем музыку (без автозапуска)
             const music = new BABYLON.Sound("backgroundMusic", "music.mp3", scene, null, {
                 loop: true,
-                autoplay: false,
+                autoplay: false, // убираем автозапуск
                 volume: 0.5
             });
 
-            // Запускаем музыку при нажатии кнопки
+            // Включение музыки по нажатию кнопки
             document.getElementById("playMusic").addEventListener("click", () => {
-                music.play();
+                if (music.isPlaying) {
+                    music.stop();
+                } else {
+                    music.play();
+                }
             });
 
             return scene;
