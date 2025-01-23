@@ -20,8 +20,9 @@
         const engine = new BABYLON.Engine(canvas, true);
 
         const createScene = function() {
-            const scene = new BABYLON.Scene(engine);
-            scene.clearColor = new BABYLON.Color3(0.3, 0.5, 1); // Синий фон
+            const background = new BABYLON.Layer("background", "background.jpg", scene, true);
+            background.texture.level = 1; // Яркость фона
+
 
             const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 4, Math.PI / 3, 13, BABYLON.Vector3.Zero(), scene);
             camera.attachControl(canvas, true);
