@@ -29,6 +29,19 @@
             // Создаём пять кубов
             const box1 = BABYLON.MeshBuilder.CreateBox("box1", {}, scene);
             box1.position = new BABYLON.Vector3(2.5, 1, 0);
+            
+            var texture = new BABYLON.Texture("pic1.jpg", scene);
+            
+            var material = new BABYLON.StandardMaterial("boxMaterial", scene);
+            material.diffuseTexture = texture;  // Назначаем текстуру
+
+            // Применяем материал к кубу
+            box.material = material;
+
+            // Запускаем рендеринг
+            engine.runRenderLoop(function () {
+                scene.render();
+            });
 
             const box2 = BABYLON.MeshBuilder.CreateBox("box2", {}, scene);
             box2.position = new BABYLON.Vector3(-2.5, 1, 0);
