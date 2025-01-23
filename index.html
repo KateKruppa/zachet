@@ -25,7 +25,7 @@
             const background = new BABYLON.Layer("background", "forest.jpg", scene, true);
             background.texture.level = 1; // Яркость фона
 
-            const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 0, Math.PI / 0, -13, BABYLON.Vector3.Zero(), scene);
+            const camera = new BABYLON.ArcRotateCamera("Camera", Math.PI / 1, Math.PI / 1, -13, BABYLON.Vector3.Zero(), scene);
             camera.attachControl(canvas, true);
 
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
