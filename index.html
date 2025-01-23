@@ -20,6 +20,9 @@
         const engine = new BABYLON.Engine(canvas, true);
 
         const createScene = function() {
+            const scene = new BABYLON.Scene(engine);
+
+        const createScene = function() {
             const background = new BABYLON.Layer("background", "forest.jpg", scene, true);
             background.texture.level = 1; // Яркость фона
 
