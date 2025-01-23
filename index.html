@@ -38,6 +38,11 @@
             // Применяем материал к кубу
             box1.material = material;
 
+            material.diffuseTexture.uScale = 1;  // Масштаб по оси X
+            material.diffuseTexture.vScale = 1;  // Масштаб по оси Y
+            material.diffuseTexture.uOffset = 0; // Сдвиг по оси X
+            material.diffuseTexture.vOffset = 0; // Сдвиг по оси Y
+
             // Запускаем рендеринг
             engine.runRenderLoop(function () {
                 scene.render();
