@@ -8,9 +8,13 @@
     <style>
         body, html { margin: 0; overflow: hidden; width: 100%; height: 100%; }
         canvas { width: 100%; height: 100%; display: block; }
+        button { padding: 10px; font-size: 16px; cursor: pointer; }
     </style>
 </head>
 <body>
+    <button id="playMusic" style="position: absolute; top: 10px; left: 10px; z-index: 10;">
+        Включить музыку
+    </button>
     <canvas id="renderCanvas"></canvas>
     <script>
         const canvas = document.getElementById("renderCanvas");
@@ -26,52 +30,40 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
+            // Функция создания куба с правильной текстурой
             function createCorrectedTexturedBox(name, position) {
-            const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
+                const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
+                const texture = new BABYLON.Texture("pic1.jpg", scene);
+                texture.uScale = -1;  // Инверсия текстуры по горизонтали
+                texture.vScale = -1;  // Инверсия текстуры по вертикали
 
-            // Загружаем текстуру
-            const texture = new BABYLON.Texture("pic1.jpg", scene);
-            texture.uScale = -1;  // Инверсия текстуры по горизонтали, если нужно
-            texture.vScale = -1;  // Инверсия текстуры по вертикали, если нужно
+                const material = new BABYLON.StandardMaterial(name + "Material", scene);
+                material.diffuseTexture = texture;
 
-            // Создаём материал
-            const material = new BABYLON.StandardMaterial(name + "Material", scene);
-            material.diffuseTexture = texture;
-
-            box.material = material;
-            box.position = position;
-
-            return box;
-        }
-
-        // Создаём пять кубов
-        createCorrectedTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
-        createCorrectedTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
-        createCorrectedTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
-        createCorrectedTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
-        createCorrectedTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
-
-                ];
-                
-                box.setVerticesData(BABYLON.VertexBuffer.UVKind, newUVs);
+                box.material = material;
+                box.position = position;
 
                 return box;
             }
 
-            // Создаём пять кубов с текстурой
-            createTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
-            createTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
-            createTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
-            createTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
-            createTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
+            // Создаём пять кубов с правильной текстурой
+            createCorrectedTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
+            createCorrectedTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
+            createCorrectedTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
+            createCorrectedTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
+            createCorrectedTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
 
-            // Добавляем музыку в сцену
+            // Добавляем музыку (без автозапуска)
             const music = new BABYLON.Sound("backgroundMusic", "music.mp3", scene, null, {
-                loop: true,   // Зацикливание музыки
-                autoplay: true, // Автоматический запуск
-                volume: 0.5    // Громкость (0.0 - тишина, 1.0 - максимум)
+                loop: true,
+                autoplay: false,
+                volume: 0.5
             });
 
+            // Запускаем музыку при нажатии кнопки
+            document.getElementById("playMusic").addEventListener("click", () => {
+                music.play();
+            });
 
             return scene;
         };
