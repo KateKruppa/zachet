@@ -26,26 +26,33 @@
             const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
             light.intensity = 0.8;
 
+            function createCorrectedTexturedBox(name, position) {
+            const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
+
             // Загружаем текстуру
             const texture = new BABYLON.Texture("pic1.jpg", scene);
-            const material = new BABYLON.StandardMaterial("boxMaterial", scene);
-            material.diffuseTexture = texture;  // Назначаем текстуру
+            texture.uScale = -1;  // Инверсия текстуры по горизонтали, если нужно
+            texture.vScale = -1;  // Инверсия текстуры по вертикали, если нужно
 
-            // Функция для создания кубов с текстурой
-            function createTexturedBox(name, position) {
-                const box = BABYLON.MeshBuilder.CreateBox(name, {}, scene);
-                box.position = position;
-                box.material = material;
+            // Создаём материал
+            const material = new BABYLON.StandardMaterial(name + "Material", scene);
+            material.diffuseTexture = texture;
 
-                // Устанавливаем одинаковые UV-координаты для всех граней
-                const newUVs = [
-                    0, 0,  1, 0,  1, 1,  0, 1,  // передняя грань
-                    0, 0,  0, 1,  1, 1,  1, 0,  // задняя грань
-                    0, 0,  1, 0,  1, 1,  0, 1,  // верхняя грань
-                    0, 0,  1, 0,  1, 1,  0, 1,  // нижняя грань
-                    0, 0,  1, 0,  1, 1,  0, 1,  // левая грань
-                    0, 0,  1, 0,  1, 1,  0, 1   // правая грань
+            box.material = material;
+            box.position = position;
+
+            return box;
+            }
+
+            // Создаём пять кубов
+            createCorrectedTexturedBox("box1", new BABYLON.Vector3(2.5, 1, 0));
+            createCorrectedTexturedBox("box2", new BABYLON.Vector3(-2.5, 1, 0));
+            createCorrectedTexturedBox("box3", new BABYLON.Vector3(0, 1, 2.5));
+            createCorrectedTexturedBox("box4", new BABYLON.Vector3(0, 1, -2.5));
+            createCorrectedTexturedBox("box5", new BABYLON.Vector3(-2.5, 1, -2.5));
+
                 ];
+                
                 box.setVerticesData(BABYLON.VertexBuffer.UVKind, newUVs);
 
                 return box;
