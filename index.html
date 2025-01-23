@@ -32,28 +32,15 @@
             light.intensity = 0.8;
             
 
-            function createBox(x, y, z, textureFile1, textureFile2, size) {
+            function createBox(x, y, z, textureFile, size) {
                 const box = BABYLON.MeshBuilder.CreateBox("box", { size: size }, scene);
                 box.position.set(x, y, z);
 
                 
                 const material = new BABYLON.StandardMaterial("material", scene);
-                material.diffuseTexture = new BABYLON.Texture(textureFile1, scene);
+                material.diffuseTexture = new BABYLON.Texture(textureFile, scene);
 
-                
                 box.material = material;
-
-                
-                box.actionManager = new BABYLON.ActionManager(scene);
-                box.actionManager.registerAction(
-                        new BABYLON.ExecuteCodeAction(
-                        BABYLON.ActionManager.OnPointerDownTrigger, 
-                        function () {
-                            console.log(`Меняем текстуру с ${textureFile1} на ${textureFile2}`);
-                            box.material.diffuseTexture = new BABYLON.Texture(textureFile2, scene);
-                        }
-                    )
-                );
 
                 return box;
             }
